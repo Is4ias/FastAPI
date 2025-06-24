@@ -23,15 +23,15 @@ def test_create_user(client):
         '/users/',
         json={
             'username': 'alice',
-            'email': 'alice@gmail.com',
+            'email': 'alice@example.com',
             'password': 'secret',
         },
     )
     assert response.status_code == HTTPStatus.CREATED
     assert response.json() == {
-        'username': 'alice',
-        'email': 'alice@gmail.com',
         'id': 1,
+        'email': 'alice@example.com',
+        'username': 'alice',
     }
 
 
@@ -56,14 +56,15 @@ def test_update_user(client):
         json={
             'username': 'bob',
             'email': 'bob@example.com',
-            'password': 'secrets'
-        })
+            'password': 'secrets',
+        },
+    )
 
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {
         'username': 'bob',
         'email': 'bob@example.com',
-        'id': '1'
+        'id': 1,
     }
 
 
@@ -74,5 +75,5 @@ def test_delete_user(client):
     assert response.json() == {
         'username': 'bob',
         'email': 'bob@example.com',
-        'id': '1'
+        'id': 1,
     }
