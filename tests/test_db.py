@@ -14,13 +14,6 @@ def test_create_user(session, mock_db_time):
 
         user = session.scalar(select(User).where(User.username == 'test'))
 
-    # assert asdict(user) == {
-    #     'id': 1,
-    #     'username': 'test',
-    #     'email': 'test@test',
-    #     'password': 'secret',
-    #     'created _at': time,
-    # }
     user_dict = asdict(user)
 
     assert user_dict['id'] == 1
