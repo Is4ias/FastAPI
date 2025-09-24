@@ -12,9 +12,9 @@ class UserSchema(BaseModel):
 
 
 class UserPublic(BaseModel):
+    id: int
     username: str
     email: EmailStr
-    id: int
     model_config = ConfigDict(from_attributes=True)
 
 
