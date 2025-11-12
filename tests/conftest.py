@@ -32,11 +32,13 @@ def session():
         poolclass=StaticPool,
     )
 
-    table_registry.metadata.drop_all(engine)  # banco de dados em memória
+    table_registry.metadata.drop_all(engine)
     table_registry.metadata.create_all(engine)
 
     with Session(engine) as session:
         yield session
+
+    table_registry.metadata.drop_all(engine)
 
 
 @contextmanager

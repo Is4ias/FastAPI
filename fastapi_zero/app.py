@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.security import OAuth2PasswordRequestForm, verify_password
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -13,6 +14,7 @@ from fastapi_zero.schemas import (
     UserPublic,
     UserSchema,
 )
+from fastapi_zero.security import get_password_hash
 
 app = FastAPI(title='Minha API')
 
@@ -44,7 +46,7 @@ def create_user(user: UserSchema, session: Session = Depends(get_session)):
     db_user = User(
         username=user.username,
         email=user.email,
-        password=user.password,
+        password=get_password_hash(user.password),
     )
     session.add(db_user)
     session.commit()
@@ -57,7 +59,7 @@ def create_user(user: UserSchema, session: Session = Depends(get_session)):
 def read_users(
     limit: int = 10, offset: int = 0, session: Session = Depends(get_session)
 ):
-    users = session.scalars(select(User).limit(limit).offset(offset)).all( )
+    users = session.scalars(select(User).limit(limit).offset(offset)).all()
     return {'users': users}
 
 
@@ -76,7 +78,7 @@ def update_user(
     try:
         user_db.email = user.email
         user_db.username = user.username
-        user_db.password = user.password
+        user_db.password = get_password_hash(user.password)
 
         session.add(user_db)
         session.commit()
@@ -106,3 +108,26 @@ def delete_user(user_id: int, session: Session = Depends(get_session)):
     session.commit()
 
     return {'message': 'User deleted'}
+
+
+@app.post('/token')
+def login_for_acess_token(
+    from_data: OAuth2PasswordRequestForm = Depends(),
+    session: Session = Depends(get_session)
+):
+    user = session.scalar(
+        select(User).where(User.email == from_data.username)
+    )
+    
+    if not user:
+        raise HTTPException(
+            status_code=HTTPStatus.UNAUTHORIZED,
+            detail='Incorrect email or password'
+        )
+    
+    if not verify_password(from_data.password, user.password):
+        raise HTTPException(
+            status_code=HTTPStatus.UNAUTHORIZED,
+            detail='Incorrect email or password'  
+        )
+    

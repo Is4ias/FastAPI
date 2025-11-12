@@ -23,15 +23,15 @@ def test_create_user(client):
     response = client.post(
         '/users/',
         json={
-            'username': 'Teste1',
+            'username': 'teste1',
             'email': 'teste1@example.com',
-            'password': 'testtest',
+            'password': 'secret',
         },
     )
 
     assert response.status_code == HTTPStatus.CREATED
     assert response.json() == {
-        'username': 'Teste1',
+        'username': 'teste1',
         'email': 'teste1@example.com',
         'id': response.json().get('id'),
     }
