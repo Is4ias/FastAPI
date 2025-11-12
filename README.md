@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🚀 FastAPI do Zero
 
 Este repositório contém o projeto prático desenvolvido ao longo do curso **FastAPI do Zero**, ministrado pelo Eduardo Mendes @Dunossauro. Curso focado em aprender e aplicar as melhores práticas para a construção de APIs **performáticas, seguras e escaláveis** em Python.
@@ -46,3 +47,6 @@ Este projeto utiliza um _stack_ moderno de desenvolvimento Python:
 - **Contêinerização:** **Docker**
 - **Testes:** **Pytest**
 - **Deploy:** **Fly.io**
+=======
+
+>>>>>>> c4f7f4139414d32dec5eb22f4a24070668a010eb
